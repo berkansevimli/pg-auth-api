@@ -39,6 +39,20 @@ router.post("/login", async (req, res) => {
     }
 })
 
+//update user
+router.put('/update/:userId',async (req, res) => {
+    try {
+        const { userId } = req.params
+        const text = "UPDATE users SET username = $1 WHERE id = $2 RETURNING *"
+        const values = [req.body.username,  userId]
+        const { rows } = await postgresClient.query(text, values)
+        return res.status(200).json({"updatedUser": rows[0]})
+    } catch (error) {
+        console.log("error occured: " +  error.message)
+        return res.status(400).json({"message":error.message})
+    }
+})
+    
 
   
 

@@ -67,6 +67,19 @@ router.delete('/delete/:userId',async (req, res) => {
     }
 })
 
+//get all users
+router.get('/',async (req, res) => {
+    try {
+        const text = "SELECT * FROM users"
+        const { rows } = await postgresClient.query(text)
+        return res.status(200).json({"users": rows})
+    } catch (error) {
+        console.log("error occured: " +  error.message)
+        return res.status(400).json({"message":error.message})
+    }
+})
+
+
   
 
 

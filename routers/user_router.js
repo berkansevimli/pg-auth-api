@@ -17,6 +17,29 @@ router.post("/create",async (req, res) => {
         return res.status(400).json({"message":error.message})
     }
 })
+
+
+//login user
+router.post("/login", async (req, res) => {
+    try {
+        const text = "SELECT * FROM users WHERE email = $1 and password = crypt($2, password)"
+        const values = [req.body.email, req.body.password]
+        const { rows } = await postgresClient.query(text, values)
+        if(rows.length === 0){
+            return res.status(400).json({"message":"User not found"})
+        }
+        else{
+            const user = rows[0]
+            return res.status(200).json({"user":user})
+          
+        }
+    } catch (error) {
+        console.log("error occured: " +  error.message)
+        return res.status(400).json({"message ":error.message})
+    }
+})
+
+
   
 
 

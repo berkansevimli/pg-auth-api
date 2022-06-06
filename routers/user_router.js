@@ -52,7 +52,20 @@ router.put('/update/:userId',async (req, res) => {
         return res.status(400).json({"message":error.message})
     }
 })
-    
+
+//delete user
+router.delete('/delete/:userId',async (req, res) => {
+    try { 
+        const { userId } = req.params
+        const text = "DELETE FROM users WHERE id = $1 RETURNING *"
+        const values = [userId]
+        const { rows } = await postgresClient.query(text, values)
+        return res.status(200).json({"deletedUser": rows[0]})
+    } catch (error) {
+        console.log("error occured: " +  error.message)
+        return res.status(400).json({"message":error.message})
+    }
+})
 
   
 
